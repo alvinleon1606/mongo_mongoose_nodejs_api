@@ -12,16 +12,16 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [14.x, 16.x, 18.x]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Use Node.JS ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       
@@ -41,13 +41,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      
-      - name: Add remote origin to Heroku
-        run: git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
-      
-      - name: Deploy code to heroku
-        run: git push --force heroku main
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:      
+            service-id: ${{secrets.SERVICE_ID}}
+            api-key: ${{secrets.RENDER_API_KEY}}
+            
+
