@@ -1,65 +1,23 @@
+name: Create Review App on Render
+
 on:
-  push:
-    branches: [main]
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  test:
-    name: Test
+  create_review_app:
+    name: Create Review App
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20]
+    if: github.event_name == 'pull_request'
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Use Node.JS ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: NPM install, build and test
-        run: |
-          npm install
-          npm test
-        env:
-          DBHOST: ${{ secrets.DBHOST }}
-          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-          JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
 
-  build:
-    name: Build
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Create Review App
+        uses: renderapp/render-deploy-action@v1.2.0
         with:
-          fetch-depth: 0
-      - name: Use Node.JS ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: NPM install and build
-        run: |
-          npm install
-          npm run build
-
-  deploy:
-    name: Deploy
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Use Node.JS ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Deploy to production
-        uses: johnbeynon/render-deploy-action@v0.0.8
-        with:
-          service-id: ${{ secrets.SERVICE_ID }}
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
           api-key: ${{ secrets.RENDER_API_KEY }}
+          branch: ${{ github.event.pull_request.head.ref }}
+          subdomain: pr-${{ github.event.pull_request.number }}
