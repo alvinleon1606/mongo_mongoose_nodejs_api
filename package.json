@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon server.js",
-    "test": "cross-env NODE_ENV=test mocha --recursive --exit"
+    "test": "cross-env NODE_ENV=test mocha --recursive --exit",
+    "build": "echo 'Building...' && exit 0"
   },
   "engines": {
     "node": "^14.16.0",
