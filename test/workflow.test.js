@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 
 describe('User workflow tests', () => {
 
-    it('should register + login a user, create product and to verify 1 in DB', (done) => {
+    it('should register + login a user, create product and to verify 1 in DataBase', (done) => {
 
         // 1) Register new user
         let user = {
