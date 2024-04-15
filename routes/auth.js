@@ -62,7 +62,7 @@ router.post("/login", async (req, res) => {
 
     //throw error if password is wrong
     if (!validPassword) {
-        return res.status(400).json({ error: "Password is wrong" })
+        return res.status(400).json({ error: "Password is wrongg" })
     }
 
     //create authentication token with username and id
