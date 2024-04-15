@@ -11,6 +11,14 @@ router.post("/", verifyToken, (req, res) => {
         .catch(err => { res.status(500).send({ message: err.message }); });
 });
 
+// fetch product
+router.get("/all", (req, res) => {
+    product.find()
+        .then(products => { res.status(200).json(products); })
+        .catch(err => { res.status(500).json({ message: err.message }); });
+});
+
+
 router.get("/", (req, res) => {
     //advanced query by name
     const name = req.query.name;
